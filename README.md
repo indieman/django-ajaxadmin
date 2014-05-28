@@ -7,32 +7,32 @@ Quick start
 -----------
 
 1. Add "ajaxadmin" to your INSTALLED_APPS setting **BEFORE** `django.contrib.admin`
-or any other admin replacement (like django-suit or grappelli)::
+or any other admin replacement (like django-suit or grappelli):
 
-    INSTALLED_APPS = (
-        'ajaxadmin',
-        'django.contrib.admin',
-        ...
-    )
+        INSTALLED_APPS = (
+            'ajaxadmin',
+            'django.contrib.admin',
+            ...
+        )
 
-2. Inherit your ModelAdmin class from `ajaxadmin.admin.AjaxMultiuploadAdmin`::
+2. Inherit your ModelAdmin class from `ajaxadmin.admin.AjaxMultiuploadAdmin`:
 
-    from ajaxadmin.admin import AjaxMultiuploadAdmin
+        from ajaxadmin.admin import AjaxMultiuploadAdmin
 
-    class MyModelAdmin(AjaxMultiuploadAdmin):
-        ...
+        class MyModelAdmin(AjaxMultiuploadAdmin):
+            ...
 
-3. Suppose you've got the following model relationship::
+3. Suppose you've got the following model relationship:
 
-    class Parent(models.Model):
-        ...
+        class Parent(models.Model):
+            ...
 
-    class MyImage(models.Model):
-        parent = models.ForeignKey(Parent)
-        img = models.ImageField(upload_to='my_images')
-        img_thumbnail = models.ImageField(upload_to='my_images/thumbnails')
+        class MyImage(models.Model):
+            parent = models.ForeignKey(Parent)
+            img = models.ImageField(upload_to='my_images')
+            img_thumbnail = models.ImageField(upload_to='my_images/thumbnails')
 
-Than to add admin ajax widget, simply do this::
+Than to add admin ajax widget, simply do this:
 
     class MyModelAdmin(AjaxMultiuploadAdmin):
         ...
@@ -43,28 +43,28 @@ Than to add admin ajax widget, simply do this::
 
 Here 'parent' is a name of foreign key field, 'img' is a name of file field (could be ImageField or FileField), and 'img_thumbnail' (it's optional) is a name of thumbnail field.
 
-4. Then in any of your admin templates (override `admin/change_form.html`, for example) do the following::
+4. Then in any of your admin templates (override `admin/change_form.html`, for example) do the following:
 
-    {% extends "admin/change_form.html" %}
-    {% load i18n %}
-    {% load staticfiles %}
-    {% load ajaxadmin %}
+        {% extends "admin/change_form.html" %}
+        {% load i18n %}
+        {% load staticfiles %}
+        {% load ajaxadmin %}
 
-    {% block extrahead %}{{ block.super }}
+        {% block extrahead %}{{ block.super }}
 
-    <!-- You're gonna need jQuery-cookie and jQuery-Upload-File static files -->
-    <script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
-    <link href="http://hayageek.github.io/jQuery-Upload-File/uploadfile.min.css" rel="stylesheet">
-    <script src="http://hayageek.github.io/jQuery-Upload-File/jquery.uploadfile.min.js"></script>
+        <!-- You're gonna need jQuery-cookie and jQuery-Upload-File static files -->
+        <script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
+        <link href="http://hayageek.github.io/jQuery-Upload-File/uploadfile.min.css" rel="stylesheet">
+        <script src="http://hayageek.github.io/jQuery-Upload-File/jquery.uploadfile.min.js"></script>
 
-    {% endblock extrahead %}
+        {% endblock extrahead %}
 
-    {% block after_field_sets %}{{ block.super }}
+        {% block after_field_sets %}{{ block.super }}
 
-    <h2>My ajax uploader</h2>
-    {% uploader "myapp_name" "parent" "myimage" original 230 150 %}
+        <h2>My ajax uploader</h2>
+        {% uploader "myapp_name" "parent" "myimage" original 230 150 %}
 
-    {% endblock after_field_sets %}
+        {% endblock after_field_sets %}
 
 Here 'myapp_name' stands for django application name, 'parent' is parent model name, 'myimage' is child model name. 230 and 150 are optional width/height restrictions that could be ommited.
 
